@@ -1,12 +1,12 @@
 namespace Isu.Entities
 {
-    public class CourseNumber
+    public enum CourseNumber
     {
-        public CourseNumber(int course)
-        {
-            Course = course;
-        }
-
-        public int Course { get; }
+#pragma warning disable SA1602
+        First = 1,
+        Second = 2,
+        Third = 3,
+        Forth = 4,
+#pragma warning restore SA1602
     }
 }

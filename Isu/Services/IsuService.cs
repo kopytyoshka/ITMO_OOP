@@ -1,79 +1,54 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Isu.Entities;
-using Isu.Services;
 using Isu.Tools;
 
-namespace Isu.Service
+namespace Isu.Services
 {
     public class IsuService : IIsuService
     {
+        public const int MaxStudentsInAGroup = 23;
         private List<Group> Groups { get; } = new List<Group>();
         private List<Student> GlobalStudentList { get; } = new List<Student>();
 
         public Group AddGroup(string name)
         {
-            if (name.StartsWith("M3"))
-            {
-                Group group = new Group(name);
-                Groups.Add(group);
-                return group;
-            }
-            else
-            {
+            if (!name.StartsWith("M3"))
                 throw new IsuException("Wrong Group Name");
-            }
+
+            var group = new Group(name);
+            Groups.Add(group);
+            return group;
         }
 
         public Student AddStudent(Group group, string name)
         {
-            if (group.Students.Count < 22)
-            {
-                Student student = new Student(name);
-                GlobalStudentList.Add(student);
-                group.Students.Add(student);
-                return student;
-            }
-            else
-            {
+            if (group.Students.Count >= MaxStudentsInAGroup)
                 throw new IsuException("Not enough space for student");
-            }
+
+            var student = new Student(name);
+            GlobalStudentList.Add(student);
+            group.Students.Add(student);
+            return student;
         }
 
         public Student GetStudent(int id)
         {
-            foreach (Student iStudent in GlobalStudentList)
-            {
-                if (id == iStudent.Id)
-                {
-                    return iStudent;
-                }
-            }
-
-            throw new IsuException("Didn't found student");
+            return GlobalStudentList.Find(student => student.Id == id) ?? throw new IsuException("wrong student id");
         }
 
         public Student FindStudent(string name)
         {
-            foreach (Student iStudent in GlobalStudentList)
-            {
-                if (name == iStudent.Name)
-                {
-                    return iStudent;
-                }
-            }
-
-            return null;
+            return GlobalStudentList.Find(iStudent => name == iStudent.Name);
         }
 
         public List<Student> FindStudents(string groupName)
         {
-            foreach (Group iGroup in Groups)
+            foreach (Group group in Groups)
             {
-                if (iGroup.Name.Name == groupName)
+                if (group.Name.Name == groupName)
                 {
-                    return iGroup.Students;
+                    return group.Students;
                 }
             }
 
@@ -82,7 +57,7 @@ namespace Isu.Service
 
         public List<Student> FindStudents(CourseNumber courseNumber)
         {
-            List<Student> courseStudentList = new List<Student>();
+            var courseStudentList = new List<Student>();
             foreach (Group iGroup in Groups)
             {
                 if (iGroup.Name.Course == courseNumber)
@@ -99,29 +74,12 @@ namespace Isu.Service
 
         public Group FindGroup(string groupName)
         {
-            foreach (Group iGroup in Groups)
-            {
-                if (iGroup.Name.Name == groupName)
-                {
-                    return iGroup;
-                }
-            }
-
-            return null;
+            return Groups.Find(iGroup => iGroup.Name.Name == groupName);
         }
 
         public List<Group> FindGroups(CourseNumber courseNumber)
         {
-            List<Group> courseGroupList = new List<Group>();
-            foreach (Group iGroup in Groups)
-            {
-                if (iGroup.Name.Course == courseNumber)
-                {
-                    courseGroupList.Add(iGroup);
-                }
-            }
-
-            return courseGroupList;
+            return Groups.Where(iGroup => iGroup.Name.Course == courseNumber).ToList();
         }
 
         public void ChangeStudentGroup(Student student, Group newGroup)
@@ -132,7 +90,7 @@ namespace Isu.Service
                 {
                     if (iStudent.Id == student.Id)
                     {
-                        if (newGroup.Students.Count < 22)
+                        if (newGroup.Students.Count < MaxStudentsInAGroup - 1)
                         {
                             newGroup.Students.Add(student);
                             iGroup.Students.Remove(student);

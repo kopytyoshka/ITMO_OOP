@@ -1,9 +1,7 @@
 using Isu.Entities;
-using Isu.Service;
 using Isu.Services;
 using Isu.Tools;
 using NUnit.Framework;
-
 namespace Isu.Tests
 {
     public class Tests
@@ -31,9 +29,9 @@ namespace Isu.Tests
             Assert.Catch<IsuException>(() =>
             {
                 Group group = _isuService.AddGroup("M3209");
-                for (int i = 0; i < 23; i++)
+                for (int i = 0; i < IsuService.MaxStudentsInAGroup + 1; i++)
                 {
-                    Student student = _isuService.AddStudent(group, "Kopytyoshka");
+                    _isuService.AddStudent(group, "Kopytyoshka");
                 }
 
             });
@@ -44,8 +42,8 @@ namespace Isu.Tests
         {
             Assert.Catch<IsuException>(() =>
             {
-                Group group = _isuService.AddGroup("P3111");
-                Group group2 = _isuService.AddGroup("M2111");
+                _isuService.AddGroup("P3111");
+                _isuService.AddGroup("M2111");
             });
         }
 
@@ -57,9 +55,9 @@ namespace Isu.Tests
                 Group oldGroup = _isuService.AddGroup("M3210");
                 Student studentToMove = _isuService.AddStudent(oldGroup, "Kirill");
                 Group newGroup = _isuService.AddGroup("M3209");
-                for (int i = 0; i < 22; i++)
+                for (int i = 0; i < IsuService.MaxStudentsInAGroup; i++)
                 {
-                    Student student = _isuService.AddStudent(newGroup, "Kopytyoshka");
+                    _isuService.AddStudent(newGroup, "Kopytyoshka");
                 }
 
                 _isuService.ChangeStudentGroup(studentToMove, newGroup);
