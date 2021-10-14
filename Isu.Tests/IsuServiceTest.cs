@@ -42,8 +42,8 @@ namespace Isu.Tests
         {
             Assert.Catch<IsuException>(() =>
             {
-                _isuService.AddGroup("P3111");
-                _isuService.AddGroup("M2111");
+                _isuService.AddGroup("M3111");
+                _isuService.AddGroup("P3211");
             });
         }
 

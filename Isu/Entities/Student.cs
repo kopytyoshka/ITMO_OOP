@@ -4,7 +4,6 @@ namespace Isu.Entities
     {
         internal Student(string name)
         {
-            Id = new IdCounter().Id;
             Name = name;
         }
 

@@ -1,31 +1,42 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Isu.Entities;
 using Isu.Tools;
-
+using Microsoft.VisualBasic;
 namespace Isu.Services
 {
     public class IsuService : IIsuService
     {
         public const int MaxStudentsInAGroup = 23;
-        private List<Group> Groups { get; } = new List<Group>();
+        private List<string> _possibleGroupNames = new List<string> { "M3" };
+        private List<Group> _groups = new List<Group>();
         private List<Student> GlobalStudentList { get; } = new List<Student>();
-
         public Group AddGroup(string name)
         {
-            if (!name.StartsWith("M3"))
-                throw new IsuException("Wrong Group Name");
+            bool check = false;
+            foreach (var megaFaculty in _possibleGroupNames)
+            {
+                if (name.Substring(0, 2) == megaFaculty)
+                {
+                    check = true;
+                }
+            }
 
-            var group = new Group(name);
-            Groups.Add(group);
+            if (!check)
+            {
+                throw new IsuException("Wrong Group Name");
+            }
+
+            var group = new Group(new GroupName(name));
+            _groups.Add(group);
             return group;
         }
 
         public Student AddStudent(Group group, string name)
         {
-            if (group.Students.Count >= MaxStudentsInAGroup)
+            if (group.Students.Count >= IsuService.MaxStudentsInAGroup)
                 throw new IsuException("Not enough space for student");
-
             var student = new Student(name);
             GlobalStudentList.Add(student);
             group.Students.Add(student);
@@ -44,7 +55,7 @@ namespace Isu.Services
 
         public List<Student> FindStudents(string groupName)
         {
-            foreach (Group group in Groups)
+            foreach (Group group in _groups)
             {
                 if (group.Name.Name == groupName)
                 {
@@ -52,13 +63,13 @@ namespace Isu.Services
                 }
             }
 
-            return null;
+            return Enumerable.Empty<Student>() as List<Student>;
         }
 
         public List<Student> FindStudents(CourseNumber courseNumber)
         {
             var courseStudentList = new List<Student>();
-            foreach (Group iGroup in Groups)
+            foreach (Group iGroup in _groups)
             {
                 if (iGroup.Name.Course == courseNumber)
                 {
@@ -74,23 +85,23 @@ namespace Isu.Services
 
         public Group FindGroup(string groupName)
         {
-            return Groups.Find(iGroup => iGroup.Name.Name == groupName);
+            return _groups.Find(iGroup => iGroup.Name.Name == groupName);
         }
 
         public List<Group> FindGroups(CourseNumber courseNumber)
         {
-            return Groups.Where(iGroup => iGroup.Name.Course == courseNumber).ToList();
+            return _groups.Where(iGroup => iGroup.Name.Course == courseNumber).ToList();
         }
 
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
-            foreach (Group iGroup in Groups)
+            foreach (Group iGroup in _groups)
             {
                 foreach (Student iStudent in iGroup.Students)
                 {
                     if (iStudent.Id == student.Id)
                     {
-                        if (newGroup.Students.Count < MaxStudentsInAGroup - 1)
+                        if (newGroup.Students.Count < IsuService.MaxStudentsInAGroup)
                         {
                             newGroup.Students.Add(student);
                             iGroup.Students.Remove(student);

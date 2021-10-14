@@ -4,9 +4,9 @@ namespace Isu.Entities
 {
     public class Group
     {
-        public Group(string groupName)
+        public Group(GroupName groupName)
         {
-            Name = new GroupName(groupName);
+            Name = groupName;
             Students = new List<Student>();
         }
 
