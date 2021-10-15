@@ -26,40 +26,40 @@ namespace Isu.Tests
         [Test]
         public void ReachMaxStudentPerGroup_ThrowException()
         {
+            Group group = _isuService.AddGroup("M3209");
             Assert.Catch<IsuException>(() =>
             {
-                Group group = _isuService.AddGroup("M3209");
-                for (int i = 0; i < IsuService.MaxStudentsInAGroup + 1; i++)
+                for (int i = 0; i < IsuService.MaxStudentsGroup + 1; i++)
                 {
                     _isuService.AddStudent(group, "Kopytyoshka");
                 }
 
             });
         }
-
-        [Test]
-        public void CreateGroupWithInvalidName_ThrowException()
+        
+        [TestCase("P3211")]
+        [TestCase("M31111")]
+        public void CreateGroupWithInvalidName_ThrowException(string group)
         {
             Assert.Catch<IsuException>(() =>
             {
-                _isuService.AddGroup("M3111");
-                _isuService.AddGroup("P3211");
+                _isuService.AddGroup(group);
             });
         }
 
         [Test]
         public void TransferStudentToAnotherGroup_GroupChanged()
         {
+            Group oldGroup = _isuService.AddGroup("M3210");
+            Student studentToMove = _isuService.AddStudent(oldGroup, "Kirill");
+            Group newGroup = _isuService.AddGroup("M3209");
+            for (int i = 0; i < IsuService.MaxStudentsGroup; i++)
+            {
+                _isuService.AddStudent(newGroup, "Kopytyoshka");
+            }
+
             Assert.Catch<IsuException>(() =>
             {
-                Group oldGroup = _isuService.AddGroup("M3210");
-                Student studentToMove = _isuService.AddStudent(oldGroup, "Kirill");
-                Group newGroup = _isuService.AddGroup("M3209");
-                for (int i = 0; i < IsuService.MaxStudentsInAGroup; i++)
-                {
-                    _isuService.AddStudent(newGroup, "Kopytyoshka");
-                }
-
                 _isuService.ChangeStudentGroup(studentToMove, newGroup);
             });
         }

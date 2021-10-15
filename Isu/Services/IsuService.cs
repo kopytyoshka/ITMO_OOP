@@ -1,14 +1,14 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Isu.Entities;
 using Isu.Tools;
-using Microsoft.VisualBasic;
+
 namespace Isu.Services
 {
     public class IsuService : IIsuService
     {
-        public const int MaxStudentsInAGroup = 23;
+        public const int MaxStudentsGroup = 23;
+        private const int GroupNameLength = 5;
         private List<string> _possibleGroupNames = new List<string> { "M3" };
         private List<Group> _groups = new List<Group>();
         private List<Student> GlobalStudentList { get; } = new List<Student>();
@@ -17,7 +17,7 @@ namespace Isu.Services
             bool check = false;
             foreach (var megaFaculty in _possibleGroupNames)
             {
-                if (name.Substring(0, 2) == megaFaculty)
+                if (name.Substring(0, 2) == megaFaculty && name.Length == GroupNameLength && int.TryParse(name.Substring(2, 3), out int groupNumber))
                 {
                     check = true;
                 }
@@ -35,7 +35,7 @@ namespace Isu.Services
 
         public Student AddStudent(Group group, string name)
         {
-            if (group.Students.Count >= IsuService.MaxStudentsInAGroup)
+            if (group.Students.Count >= IsuService.MaxStudentsGroup)
                 throw new IsuException("Not enough space for student");
             var student = new Student(name);
             GlobalStudentList.Add(student);
@@ -68,19 +68,7 @@ namespace Isu.Services
 
         public List<Student> FindStudents(CourseNumber courseNumber)
         {
-            var courseStudentList = new List<Student>();
-            foreach (Group iGroup in _groups)
-            {
-                if (iGroup.Name.Course == courseNumber)
-                {
-                    foreach (Student iStudent in iGroup.Students)
-                    {
-                        courseStudentList.Add(iStudent);
-                    }
-                }
-            }
-
-            return courseStudentList;
+            return _groups.Where(iGroup => iGroup.Name.Course == courseNumber).SelectMany(iGroup => iGroup.Students).ToList();
         }
 
         public Group FindGroup(string groupName)
@@ -101,7 +89,7 @@ namespace Isu.Services
                 {
                     if (iStudent.Id == student.Id)
                     {
-                        if (newGroup.Students.Count < IsuService.MaxStudentsInAGroup)
+                        if (newGroup.Students.Count < IsuService.MaxStudentsGroup)
                         {
                             newGroup.Students.Add(student);
                             iGroup.Students.Remove(student);
