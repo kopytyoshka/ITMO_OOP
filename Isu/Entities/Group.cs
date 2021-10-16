@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Isu.Entities
 {
@@ -12,5 +13,18 @@ namespace Isu.Entities
 
         public List<Student> Students { get; }
         public GroupName Name { get;  }
+
+        public void RemoveStudent(Student studentRemove)
+        {
+            foreach (var student in Students.Where(student => studentRemove == student))
+            {
+                Students.Remove(studentRemove);
+            }
+        }
+
+        public void AddStudent(Student studentAdd)
+        {
+            Students.Add(studentAdd);
+        }
     }
 }

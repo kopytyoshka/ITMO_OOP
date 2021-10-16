@@ -39,6 +39,7 @@ namespace Isu.Tests
         
         [TestCase("P3211")]
         [TestCase("M31111")]
+        [TestCase("M31M1")]
         public void CreateGroupWithInvalidName_ThrowException(string group)
         {
             Assert.Catch<IsuException>(() =>

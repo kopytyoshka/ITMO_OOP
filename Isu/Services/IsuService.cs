@@ -11,7 +11,7 @@ namespace Isu.Services
         private const int GroupNameLength = 5;
         private List<string> _possibleGroupNames = new List<string> { "M3" };
         private List<Group> _groups = new List<Group>();
-        private List<Student> GlobalStudentList { get; } = new List<Student>();
+        private List<Student> _globalStudentList = new List<Student>();
         public Group AddGroup(string name)
         {
             bool check = false;
@@ -38,19 +38,19 @@ namespace Isu.Services
             if (group.Students.Count >= IsuService.MaxStudentsGroup)
                 throw new IsuException("Not enough space for student");
             var student = new Student(name);
-            GlobalStudentList.Add(student);
+            _globalStudentList.Add(student);
             group.Students.Add(student);
             return student;
         }
 
         public Student GetStudent(int id)
         {
-            return GlobalStudentList.Find(student => student.Id == id) ?? throw new IsuException("wrong student id");
+            return _globalStudentList.Find(student => student.Id == id) ?? throw new IsuException("wrong student id");
         }
 
         public Student FindStudent(string name)
         {
-            return GlobalStudentList.Find(iStudent => name == iStudent.Name);
+            return _globalStudentList.Find(iStudent => name == iStudent.Name);
         }
 
         public List<Student> FindStudents(string groupName)
@@ -83,22 +83,16 @@ namespace Isu.Services
 
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
-            foreach (Group iGroup in _groups)
+            foreach (Group iGroup in from iGroup in _groups from iStudent in iGroup.Students where iStudent.Id == student.Id select iGroup)
             {
-                foreach (Student iStudent in iGroup.Students)
+                if (newGroup.Students.Count < IsuService.MaxStudentsGroup)
                 {
-                    if (iStudent.Id == student.Id)
-                    {
-                        if (newGroup.Students.Count < IsuService.MaxStudentsGroup)
-                        {
-                            newGroup.Students.Add(student);
-                            iGroup.Students.Remove(student);
-                        }
-                        else
-                        {
-                            throw new IsuException("Not enough space in new group for a student");
-                        }
-                    }
+                    iGroup.RemoveStudent(student);
+                    newGroup.AddStudent(student);
+                }
+                else
+                {
+                    throw new IsuException("Not enough space in new group for a student");
                 }
             }
         }
