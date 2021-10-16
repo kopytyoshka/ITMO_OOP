@@ -7,12 +7,14 @@ namespace Isu.Tests
     public class Tests
     {
         private IIsuService _isuService;
+        private uint _maxStudentsGroup;
 
         [SetUp]
         public void Setup()
         {
             //TODO: implement
-            _isuService = new IsuService();
+            _maxStudentsGroup = 23;
+            _isuService = new IsuService(_maxStudentsGroup);
         }
 
         [Test]
@@ -29,7 +31,7 @@ namespace Isu.Tests
             Group group = _isuService.AddGroup("M3209");
             Assert.Catch<IsuException>(() =>
             {
-                for (int i = 0; i < IsuService.MaxStudentsGroup + 1; i++)
+                for (int i = 0; i < _maxStudentsGroup + 1; i++)
                 {
                     _isuService.AddStudent(group, "Kopytyoshka");
                 }
@@ -54,7 +56,7 @@ namespace Isu.Tests
             Group oldGroup = _isuService.AddGroup("M3210");
             Student studentToMove = _isuService.AddStudent(oldGroup, "Kirill");
             Group newGroup = _isuService.AddGroup("M3209");
-            for (int i = 0; i < IsuService.MaxStudentsGroup; i++)
+            for (int i = 0; i < _maxStudentsGroup; i++)
             {
                 _isuService.AddStudent(newGroup, "Kopytyoshka");
             }

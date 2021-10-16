@@ -7,11 +7,16 @@ namespace Isu.Services
 {
     public class IsuService : IIsuService
     {
-        public const int MaxStudentsGroup = 23;
         private const int GroupNameLength = 5;
         private List<string> _possibleGroupNames = new List<string> { "M3" };
         private List<Group> _groups = new List<Group>();
         private List<Student> _globalStudentList = new List<Student>();
+        private uint _maxStudentGroup;
+        public IsuService(uint maxStudentGroup)
+        {
+            _maxStudentGroup = maxStudentGroup;
+        }
+
         public Group AddGroup(string name)
         {
             bool check = false;
@@ -35,7 +40,7 @@ namespace Isu.Services
 
         public Student AddStudent(Group group, string name)
         {
-            if (group.Students.Count >= IsuService.MaxStudentsGroup)
+            if (group.Students.Count >= _maxStudentGroup)
                 throw new IsuException("Not enough space for student");
             var student = new Student(name);
             _globalStudentList.Add(student);
@@ -85,7 +90,7 @@ namespace Isu.Services
         {
             foreach (Group iGroup in from iGroup in _groups from iStudent in iGroup.Students where iStudent.Id == student.Id select iGroup)
             {
-                if (newGroup.Students.Count < IsuService.MaxStudentsGroup)
+                if (newGroup.Students.Count < _maxStudentGroup)
                 {
                     iGroup.RemoveStudent(student);
                     newGroup.AddStudent(student);
