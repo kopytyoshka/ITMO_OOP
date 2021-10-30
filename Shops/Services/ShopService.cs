@@ -25,11 +25,11 @@ namespace Shops.Services
             return shop;
         }
 
-        public Product AddProductShop(Shop shopName, Product prodName, int amount, int price)
+        public Product AddProductToShop(Shop shop, Product prodName, int amount, int price)
         {
             var product = new Product(prodName.Name, amount);
             product.Price = price;
-            shopName.ProductsList.Add(product);
+            shop.ProductsList.Add(product);
             return product;
         }
 
@@ -56,14 +56,11 @@ namespace Shops.Services
             }
         }
 
-        public void ChangePrice(Shop shopName, Product productName, int newPrice)
+        public void ChangePrice(Shop shop, Product productName, int newPrice)
         {
-            foreach (Product product in shopName.ProductsList)
+            foreach (var product in shop.ProductsList.Where(product => product.Name.Equals(productName.Name)))
             {
-                if (product.Name.Equals(productName.Name))
-                {
-                    product.Price = newPrice;
-                }
+                product.Price = newPrice;
             }
         }
 

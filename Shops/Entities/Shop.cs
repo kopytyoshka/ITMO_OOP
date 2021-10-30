@@ -5,11 +5,11 @@ namespace Shops.Entities
 {
     public class Shop
     {
-        internal Shop(string name, string address)
+        public Shop(string name, string address)
         {
             Address = address;
             Name = name;
-            Id = ShopIdGenerator();
+            Id = Guid.NewGuid();
             ProductsList = new List<Product>();
         }
 
@@ -18,11 +18,5 @@ namespace Shops.Entities
         public string Name { get; }
         public List<Product> ProductsList { get; }
         private string Address { get; }
-
-        private static Guid ShopIdGenerator()
-        {
-            Guid id = Guid.NewGuid();
-            return id;
-        }
     }
 }

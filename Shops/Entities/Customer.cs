@@ -2,7 +2,7 @@ namespace Shops.Entities
 {
     public class Customer
     {
-        public Customer(string name, float money)
+        public Customer(string name, int money)
         {
             Name = name;
             Wallet = money;

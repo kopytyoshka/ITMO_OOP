@@ -2,7 +2,7 @@ namespace Shops.Entities
 {
     public class Product
     {
-        internal Product(string name, int amount)
+        public Product(string name, int amount)
         {
             Name = name;
             Amount = amount;

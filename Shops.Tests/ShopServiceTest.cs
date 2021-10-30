@@ -27,7 +27,7 @@ namespace Shops.Tests
         {
             Shop shop = _shopService.AddShop("У Алисы", "ул. Пушкина 2");
             Product product = _shopService.AddProductStorage("Молочко: Просто Квашино");
-            Assert.Contains(_shopService.AddProductShop( shop, product, 10, 100), shop.ProductsList);
+            Assert.Contains(_shopService.AddProductToShop( shop, product, 10, 100), shop.ProductsList);
         }
 
         [Test]
@@ -36,8 +36,8 @@ namespace Shops.Tests
             Shop highPriceShop = _shopService.AddShop("У Володи", "ул. Пушкина 3");
             Shop cheapestShop = _shopService.AddShop("У Володи", "Ул Пушкина 4");
             Product product = _shopService.AddProductStorage("Молочко: Домик в Колхозе");
-            _shopService.AddProductShop(highPriceShop, product, 100, 15);
-            _shopService.AddProductShop(cheapestShop, product, 10, 14);
+            _shopService.AddProductToShop(highPriceShop, product, 100, 15);
+            _shopService.AddProductToShop(cheapestShop, product, 10, 14);
             Assert.Contains(_shopService.FindCheapestShop(product), new[] {cheapestShop.Id.ToString()});
         }
 
@@ -46,7 +46,7 @@ namespace Shops.Tests
         {
             Shop shop = _shopService.AddShop("У Кости", "ул. Колотушкина 3");
             Product product = _shopService.AddProductStorage("Яблочный сок Огороды придонья");
-            _shopService.AddProductShop(shop, product, 100, 100);
+            _shopService.AddProductToShop(shop, product, 100, 100);
             var customer = new Customer("Коля", 250);
             Assert.Catch<ShopException>(() =>
             {
@@ -59,7 +59,7 @@ namespace Shops.Tests
         {
             Shop shop = _shopService.AddShop("У Алексея", "Кронверкский 49");
             Product product = _shopService.AddProductStorage("Баллы за лабы");
-            _shopService.AddProductShop(shop, product, 2, 200);
+            _shopService.AddProductToShop(shop, product, 2, 200);
             var customer = new Customer("Алексей", 2000);
             Assert.Catch<ShopException>(() =>
             {
@@ -73,7 +73,7 @@ namespace Shops.Tests
         {
             Shop shop = _shopService.AddShop("У Дианы", "Ломоносова 1");
             Product product = _shopService.AddProductStorage("Пепсикола");
-            _shopService.AddProductShop(shop, product, 50, 250);
+            _shopService.AddProductToShop(shop, product, 50, 250);
             _shopService.ChangePrice(shop, product, newPrice);
             Assert.AreEqual(newPrice, shop.ProductsList.Find(product1 => product1.Name == product.Name).Price);
         }
