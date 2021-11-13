@@ -43,7 +43,11 @@ namespace IsuExtra.Services
 
         public Flows AddLessonFlow(Lessons lessons, Flows flow)
         {
-            foreach (Lessons vLesson in from vFlow in _flows where vFlow == flow from vLesson in _lessons where vLesson == lessons select vLesson)
+            foreach (Lessons vLesson in from vFlow in _flows
+                where vFlow == flow
+                from vLesson in _lessons
+                where vLesson == lessons
+                select vLesson)
             {
                 flow.LessonsList.Add(lessons);
             }
@@ -53,7 +57,11 @@ namespace IsuExtra.Services
 
         public Ognp AddFlowOgnp(Flows flow, Ognp ognp)
         {
-            foreach (Flows vflow in from vOgnp in _ognps where vOgnp == ognp from vflow in _flows where vflow == flow select vflow)
+            foreach (Flows vflow in from vOgnp in _ognps
+                where vOgnp == ognp
+                from vflow in _flows
+                where vflow == flow
+                select vflow)
             {
                 ognp.FlowsList.Add(flow);
             }
@@ -68,9 +76,13 @@ namespace IsuExtra.Services
                 throw new Exception("One Megafaculty");
             }
 
+            if (flow.Capacity <= flow.Students.Count)
+            {
+                throw new Exception("Not enough space");
+            }
+
             foreach (Ognp vOgnp in _ognps.Where(vOgnp => vOgnp == ognp))
             {
-                if (flow.Capacity > flow.Students.Count)
                 {
                     foreach (Lessons variaLesson in _lessons)
                     {
@@ -85,10 +97,6 @@ namespace IsuExtra.Services
                             throw new Exception("Issue with schedule");
                         }
                     }
-                }
-                else
-                {
-                    throw new Exception("Not enough space");
                 }
             }
         }

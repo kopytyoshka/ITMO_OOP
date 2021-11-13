@@ -147,7 +147,7 @@ namespace IsuExtra.Tests
         }
 
         [Test]
-        public void StudentMegafacultyAndOgnpMegafacultySame()
+        public void StudentMegafacultyAndOgnpMegafacultySame_ThrowException()
         {
             Lessons lessons = _isuExtra.AddLesson("Науки о Жизни", "8:20");
             Flows flows = _isuExtra.AddFlow("БиоМио", 20);
