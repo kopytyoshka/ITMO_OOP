@@ -10,9 +10,10 @@ namespace IsuExtra.Services
     public class IsuExtraService : IIsuExtraService
     {
         private List<Ognp> _ognps = new ();
-        private List<Lessons> _lessons = new ();
-        private List<Flows> _flows = new ();
+        private List<Lesson> _lessons = new ();
+        private List<Flow> _flows = new ();
         private List<Student> _studentsWithOgnp = new ();
+        private List<GroupLesson> _groupLessons = new ();
 
         public Ognp AddOgnp(string name, string megaFaculty)
         {
@@ -21,47 +22,39 @@ namespace IsuExtra.Services
             return ognp;
         }
 
-        public GroupLessons AddGroupLessons(string name, string time, GroupName groupName)
+        public void AddGroupLessons(string name, string time, GroupName groupName)
         {
-            var groupLesson = new GroupLessons(name, time, groupName);
-            return groupLesson;
+            var groupLesson = new GroupLesson(name, time, groupName);
+            _groupLessons.Add(groupLesson);
         }
 
-        public Lessons AddLesson(string name, string time)
+        public Lesson AddLesson(string name, string time)
         {
-            var lesson = new Lessons(name, time);
+            var lesson = new Lesson(name, time);
             _lessons.Add(lesson);
             return lesson;
         }
 
-        public Flows AddFlow(string name, int size)
+        public Flow AddFlow(string name, int size)
         {
-            var flow = new Flows(name, size);
+            var flow = new Flow(name, size);
             _flows.Add(flow);
             return flow;
         }
 
-        public Flows AddLessonFlow(Lessons lessons, Flows flow)
+        public Flow AddLessonFlow(Lesson lesson, Flow flow)
         {
-            foreach (Lessons vLesson in from vFlow in _flows
-                where vFlow == flow
-                from vLesson in _lessons
-                where vLesson == lessons
-                select vLesson)
+            if (_flows.Contains(flow) && _lessons.Contains(lesson))
             {
-                flow.LessonsList.Add(lessons);
+                flow.LessonsList.Add(lesson);
             }
 
             return flow;
         }
 
-        public Ognp AddFlowOgnp(Flows flow, Ognp ognp)
+        public Ognp AddFlowOgnp(Flow flow, Ognp ognp)
         {
-            foreach (Flows vflow in from vOgnp in _ognps
-                where vOgnp == ognp
-                from vflow in _flows
-                where vflow == flow
-                select vflow)
+            if (_ognps.Contains(ognp) && ognp.FlowsList.Contains(flow))
             {
                 ognp.FlowsList.Add(flow);
             }
@@ -69,9 +62,15 @@ namespace IsuExtra.Services
             return ognp;
         }
 
-        public void AddStudentOgnp(Student student, Ognp ognp, Flows flow, GroupLessons groupLessons)
+        public void AddStudentOgnp(Student student, Ognp ognp, Flow flow, Group group)
         {
-            if (groupLessons.GroupName.Faculty == ognp.MegaFaculty)
+            if (!_ognps.Contains(ognp)) return;
+            if (_studentsWithOgnp.Contains(student))
+            {
+                throw new Exception("Student already choosed Ognp");
+            }
+
+            if (group.Name.Faculty == ognp.MegaFaculty)
             {
                 throw new Exception("One Megafaculty");
             }
@@ -81,33 +80,24 @@ namespace IsuExtra.Services
                 throw new Exception("Not enough space");
             }
 
-            foreach (Ognp vOgnp in _ognps.Where(vOgnp => vOgnp == ognp))
+            foreach (Lesson variaLesson in _lessons.Where(variaLesson => flow.LessonsList.Contains(variaLesson)))
             {
+                if (_groupLessons.Any(groupLessons => groupLessons.Time == variaLesson.Time))
                 {
-                    foreach (Lessons variaLesson in _lessons)
-                    {
-                        if (flow.LessonsList.Contains(variaLesson) && variaLesson.Time != groupLessons.Time)
-                        {
-                            flow.Students.Add(student);
-                            ognp.Students.Add(student);
-                            _studentsWithOgnp.Add(student);
-                        }
-                        else
-                        {
-                            throw new Exception("Issue with schedule");
-                        }
-                    }
+                    throw new Exception("Issue with schedule");
                 }
+
+                flow.Students.Add(student);
+                ognp.Students.Add(student);
+                _studentsWithOgnp.Add(student);
             }
         }
 
-        public void RemoveStudentOgnp(Ognp ognp, Flows flow, Student student)
+        public void RemoveStudentOgnp(Ognp ognp, Flow flow, Student student)
         {
-            foreach (Ognp vOgnp in _ognps.Where(vOgnp => vOgnp == ognp))
-            {
-                ognp.Students.Remove(student);
-                flow.Students.Remove(student);
-            }
+            if (!_ognps.Contains(ognp)) return;
+            ognp.Students.Remove(student);
+            flow.Students.Remove(student);
         }
 
         public List<Student> GetStudentsOgnp(Ognp ognp)
@@ -115,7 +105,7 @@ namespace IsuExtra.Services
             return ognp.Students;
         }
 
-        public List<Student> GetStudentsFlow(Flows flow)
+        public List<Student> GetStudentsFlow(Flow flow)
         {
             return flow.Students;
         }

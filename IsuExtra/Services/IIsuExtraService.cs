@@ -7,14 +7,14 @@ namespace IsuExtra.Services
     public interface IIsuExtraService
     {
         Ognp AddOgnp(string name, string megaFaculty);
-        Lessons AddLesson(string name, string time);
-        Flows AddFlow(string name, int size);
-        Flows AddLessonFlow(Lessons lessons, Flows flow);
-        Ognp AddFlowOgnp(Flows flow, Ognp ognp);
-        void AddStudentOgnp(Student student, Ognp ognp, Flows flow, GroupLessons groupLessons);
-        GroupLessons AddGroupLessons(string name, string time, GroupName groupName);
-        void RemoveStudentOgnp(Ognp ognp, Flows flow, Student student);
-        List<Student> GetStudentsFlow(Flows flow);
+        Lesson AddLesson(string name, string time);
+        Flow AddFlow(string name, int size);
+        Flow AddLessonFlow(Lesson lesson, Flow flow);
+        Ognp AddFlowOgnp(Flow flow, Ognp ognp);
+        void AddStudentOgnp(Student student, Ognp ognp, Flow flow, Group group);
+        void AddGroupLessons(string name, string time, GroupName groupName);
+        void RemoveStudentOgnp(Ognp ognp, Flow flow, Student student);
+        List<Student> GetStudentsFlow(Flow flow);
         List<Student> GetStudentsOgnp(Ognp ognp);
         List<Student> GetStudentsWithoutOgnp(Group group);
     }
