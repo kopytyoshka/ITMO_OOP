@@ -27,7 +27,7 @@ namespace IsuExtra.Tests
             Lesson lesson = _isuExtra.AddLesson("Науки о Жизни", "8:20");
             Flow flow = _isuExtra.AddFlow("БиоМио", 20);
             _isuExtra.AddLessonFlow(lesson, flow);
-            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M3");
+            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M");
             _isuExtra.AddFlowOgnp(flow, ognp);
             Group group = _isuService.AddGroup("P3209");
             Student student = _isuService.AddStudent(group, "Misha");
@@ -44,7 +44,7 @@ namespace IsuExtra.Tests
             Lesson lesson = _isuExtra.AddLesson("2", "222");
             Flow flow = _isuExtra.AddFlow("jj", 20);
             _isuExtra.AddLessonFlow(lesson, flow);
-            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M3");
+            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M");
             _isuExtra.AddFlowOgnp(flow, ognp);
             Group group = _isuService.AddGroup("P3209");
             Student student = _isuService.AddStudent(group, "Misha");
@@ -60,7 +60,7 @@ namespace IsuExtra.Tests
             Lesson lesson = _isuExtra.AddLesson("2", "222");
             Flow flow = _isuExtra.AddFlow("jj", 20);
             _isuExtra.AddLessonFlow(lesson, flow);
-            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M3");
+            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M");
             _isuExtra.AddFlowOgnp(flow, ognp);
             Group group = _isuService.AddGroup("P3209");
             _isuExtra.AddGroupLessons("Физика", "10:00", group.Name);
@@ -81,7 +81,7 @@ namespace IsuExtra.Tests
             Lesson lesson = _isuExtra.AddLesson("2", "222");
             Flow flow = _isuExtra.AddFlow("jj", 20);
             _isuExtra.AddLessonFlow(lesson, flow);
-            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M3");
+            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M");
             _isuExtra.AddFlowOgnp(flow, ognp);
             Group group = _isuService.AddGroup("P3209");
             _isuExtra.AddGroupLessons("Физика", "10:00", group.Name);
@@ -101,7 +101,7 @@ namespace IsuExtra.Tests
             Flow flows2 = _isuExtra.AddFlow("jj", 20);
             _isuExtra.AddLessonFlow(lesson, flow);
             _isuExtra.AddLessonFlow(lesson, flows2);
-            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M3");
+            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M");
             _isuExtra.AddFlowOgnp(flow, ognp);
             _isuExtra.AddFlowOgnp(flows2, ognp);
             Group group = _isuService.AddGroup("P3209");
@@ -122,7 +122,7 @@ namespace IsuExtra.Tests
             Lesson lesson = _isuExtra.AddLesson("2", "222");
             Flow flow = _isuExtra.AddFlow("jj", 20);
             _isuExtra.AddLessonFlow(lesson, flow);
-            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M3");
+            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M");
             _isuExtra.AddFlowOgnp(flow, ognp);
             Group group = _isuService.AddGroup("P3209");
             Student student = _isuService.AddStudent(group, "kolya");
@@ -137,7 +137,7 @@ namespace IsuExtra.Tests
             Lesson lesson = _isuExtra.AddLesson("НОЖ", "8:20");
             Flow flow = _isuExtra.AddFlow("jj", 20);
             _isuExtra.AddLessonFlow(lesson, flow);
-            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M3");
+            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M");
             _isuExtra.AddFlowOgnp(flow, ognp);
             Group group = _isuService.AddGroup("P3209");
             Student student = _isuService.AddStudent(group, "Misha"); 
@@ -155,7 +155,7 @@ namespace IsuExtra.Tests
             Lesson lesson = _isuExtra.AddLesson("Науки о Жизни", "8:20");
             Flow flow = _isuExtra.AddFlow("БиоМио", 20);
             _isuExtra.AddLessonFlow(lesson, flow);
-            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M3");
+            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M");
             _isuExtra.AddFlowOgnp(flow, ognp);
             Group group = _isuService.AddGroup("M3209");
             Student student = _isuService.AddStudent(group, "Misha");
@@ -167,25 +167,31 @@ namespace IsuExtra.Tests
         }
 
         [Test]
-        public void StudentAlreadyHasOgnp_ThrowException()
+        public void StudentAlreadyHasTwoOgnp_ThrowException()
         {
             Lesson lesson = _isuExtra.AddLesson("Науки о Жизни", "8:20");
             Flow flow = _isuExtra.AddFlow("БиоМио", 20);
             _isuExtra.AddLessonFlow(lesson, flow);
-            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M3");
+            Ognp ognp = _isuExtra.AddOgnp("Наука бука", "M");
             _isuExtra.AddFlowOgnp(flow, ognp);
             Lesson lesson2 = _isuExtra.AddLesson("Науки о Жизни", "8:20");
             Flow flow2 = _isuExtra.AddFlow("БиоМио", 20);
             _isuExtra.AddLessonFlow(lesson2, flow2);
-            Ognp ognp2 = _isuExtra.AddOgnp("Наука бука", "M3");
+            Ognp ognp2 = _isuExtra.AddOgnp("Наука бука", "M");
             _isuExtra.AddFlowOgnp(flow2, ognp2);
             Group group = _isuService.AddGroup("P3209");
-            Student student = _isuService.AddStudent(group, "Misha");
+            Lesson lesson3 = _isuExtra.AddLesson("Науки о Жизни", "8:20");
+            Flow flow3 = _isuExtra.AddFlow("БиоМио", 20);
+            _isuExtra.AddLessonFlow(lesson3, flow3);
+            Ognp ognp3 = _isuExtra.AddOgnp("Наука бука", "M");
+            _isuExtra.AddFlowOgnp(flow3, ognp3);
             _isuExtra.AddGroupLessons("Физика", "10:00", group.Name);
+            Student student = _isuService.AddStudent(group, "Misha");
             _isuExtra.AddStudentOgnp(student, ognp, flow, group);
+            _isuExtra.AddStudentOgnp(student, ognp2, flow2, group);
             Assert.Catch<Exception>(() =>
             {
-                _isuExtra.AddStudentOgnp(student, ognp2, flow2, group);
+                _isuExtra.AddStudentOgnp(student, ognp3, flow3, group);
             });
         }
     }

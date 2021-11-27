@@ -14,9 +14,15 @@ namespace IsuExtra.Services
         private List<Flow> _flows = new ();
         private List<Student> _studentsWithOgnp = new ();
         private List<GroupLesson> _groupLessons = new ();
+        private List<string> _possibleMegafaculties = new List<string> { "M", "P", "K" };
 
         public Ognp AddOgnp(string name, string megaFaculty)
         {
+            if (!_possibleMegafaculties.Contains(megaFaculty))
+            {
+                throw new Exception("Megafaculty does not exist");
+            }
+
             var ognp = new Ognp(name, megaFaculty);
             _ognps.Add(ognp);
             return ognp;
@@ -65,12 +71,8 @@ namespace IsuExtra.Services
         public void AddStudentOgnp(Student student, Ognp ognp, Flow flow, Group group)
         {
             if (!_ognps.Contains(ognp)) return;
-            if (_studentsWithOgnp.Contains(student))
-            {
-                throw new Exception("Student already choosed Ognp");
-            }
 
-            if (group.Name.Faculty == ognp.MegaFaculty)
+            if (group.Name.Faculty.Substring(0, 1) == ognp.MegaFaculty)
             {
                 throw new Exception("One Megafaculty");
             }
@@ -85,6 +87,13 @@ namespace IsuExtra.Services
                 if (_groupLessons.Any(groupLessons => groupLessons.Time == variaLesson.Time))
                 {
                     throw new Exception("Issue with schedule");
+                }
+
+                int ognpCounter = _ognps.Count(vOgnp => vOgnp.Students.Contains(student));
+
+                if (ognpCounter > 1)
+                {
+                    throw new Exception("Can't choose more Ognps");
                 }
 
                 flow.Students.Add(student);
