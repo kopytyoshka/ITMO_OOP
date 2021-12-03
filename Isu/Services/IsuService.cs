@@ -8,7 +8,7 @@ namespace Isu.Services
     public class IsuService : IIsuService
     {
         private const int GroupNameLength = 5;
-        private List<string> _possibleGroupNames = new List<string> { "M3" };
+        private List<string> _possibleGroupNames = new List<string> { "M3", "P3", "K3" };
         private List<Group> _groups = new List<Group>();
         private List<Student> _globalStudentList = new List<Student>();
         private uint _maxStudentGroup;

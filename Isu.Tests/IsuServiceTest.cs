@@ -35,11 +35,10 @@ namespace Isu.Tests
                 {
                     _isuService.AddStudent(group, "Kopytyoshka");
                 }
-
             });
         }
         
-        [TestCase("P3211")]
+        [TestCase("P31211")]
         [TestCase("M31111")]
         [TestCase("M31M1")]
         public void CreateGroupWithInvalidName_ThrowException(string group)
