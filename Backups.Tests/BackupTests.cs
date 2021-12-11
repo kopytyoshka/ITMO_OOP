@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Backups.Archivator;
 using Backups.Entities;
 using Backups.Repositories;
@@ -31,11 +32,7 @@ namespace Backups.Tests
             _backup.RemoveJobObjectBackupJob(jobObject);
             List<Storage> finalStorages = repository.SaveStoragesRepository(new SplitStorage(), _backup.GetJobObjects(), 1);
             _backup.StartBackupJob(finalStorages);
-            int i = 0;
-            foreach (var restorePoint in _backup.GetListRestorePoints())
-            {
-                i += restorePoint.Storages.Count;
-            }
+            int i = _backup.GetListRestorePoints().Sum(restorePoint => restorePoint.Storages.Count);
             Assert.AreEqual(2, _backup.GetListRestorePoints().Count);
             Assert.AreEqual(3, i);
         }
