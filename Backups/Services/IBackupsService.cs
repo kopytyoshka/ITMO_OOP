@@ -10,7 +10,7 @@ namespace Backups.Services
         void RemoveRestorePointBackupJob(RestorePoint restorePoint);
         List<JobObject> GetJobObjects();
         List<RestorePoint> GetListRestorePoints();
-        public void AddRestorePointBackupJob(RestorePoint restorePoint);
+        void AddRestorePointBackupJob(RestorePoint restorePoint);
         void StartBackupJob(List<Storage> storages);
     }
 }

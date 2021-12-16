@@ -5,6 +5,6 @@ namespace Backups.Archivator
 {
     public interface IArchiveAlgorythm
     {
-        public List<Storage> CreateArchive(List<JobObject> jobObjects);
+        List<Storage> CreateArchive(List<JobObject> jobObjects);
     }
 }
