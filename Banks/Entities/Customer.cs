@@ -14,11 +14,23 @@ namespace Banks.Entities
             BankAccounts = new List<BankAccount>();
         }
 
-        public string FirstName { get; }
-        public string LastName { get; }
-        public string FatherName { get; }
-        public string Passport { get; set; }
-        public string Address { get; set; }
         public List<BankAccount> BankAccounts { get; }
+        private string FirstName { get; }
+        private string LastName { get; }
+        private string FatherName { get; }
+        private string Passport { get; set; }
+        private string Address { get; set; }
+
+        public void AddCustomerInfo(Customer customer, string passport, string address)
+        {
+            customer.Passport = passport;
+            customer.Address = address;
+        }
+
+        public bool CheckFullAccount(Customer customer)
+        {
+            bool check = !(customer.Address == string.Empty || customer.Passport == string.Empty);
+            return check;
+        }
     }
 }

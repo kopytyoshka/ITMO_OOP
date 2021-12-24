@@ -8,11 +8,12 @@ namespace Banks
     {
         private static void Main()
         {
-            CentralBank centralBank = new CentralBank();
-            Customer customer1 = new Customer("ivan", "ivanov", "ivanovich");
+            var centralBank = new CentralBank();
+            var customer1 = new Customer("ivan", "ivanov", "ivanovich");
+            customer1.AddCustomerInfo(customer1, "1", "2");
             Bank tinkoff = centralBank.CreateNewBank(5, 5, 5, 5000, "Tinkoff");
             Bank sber = centralBank.CreateNewBank(4, 4, 4, 4000, "Sber");
-            var bankAccountFirst = centralBank.CreateDebit(customer1, tinkoff, 5555);
+            Debit bankAccountFirst = centralBank.CreateDebit(customer1, tinkoff, 5555);
             string firstName;
             string lastName;
             string fatherName;
@@ -22,11 +23,11 @@ namespace Banks
             lastName = Console.ReadLine();
             Console.WriteLine("Введите ваше отчество:");
             fatherName = Console.ReadLine();
-            Customer customer2 = new Customer(firstName, lastName, fatherName);
+            var customer2 = new Customer(firstName, lastName, fatherName);
             Console.WriteLine("Желаете дополнить информацию о себе? Y/N");
             string passport = string.Empty;
             string address = string.Empty;
-            switch (Console.ReadLine().ToUpper())
+            switch (Console.ReadLine()?.ToUpper())
             {
                 case "Y":
                     Console.WriteLine("Введите паспортные данные:");
@@ -39,7 +40,7 @@ namespace Banks
             }
 
             BankAccount bankAccount = null;
-            centralBank.AddCustomerInfo(customer2, passport, address);
+            customer2.AddCustomerInfo(customer2, passport, address);
             Console.WriteLine("Какой банк выберете?");
             Console.WriteLine("1) Tinkoff");
             Console.WriteLine("2) Sber");
@@ -49,34 +50,40 @@ namespace Banks
             Console.WriteLine("2) Кредитный");
             Console.WriteLine("3) Депозитный");
             string accountType = Console.ReadLine();
-            if (accountType == "1")
+            switch (accountType)
             {
-                if (bankChoose == "1")
-                    bankAccount = centralBank.CreateDebit(customer2, tinkoff, 0);
-                if (bankChoose == "2")
-                    bankAccount = centralBank.CreateDebit(customer2, sber, 0);
-            }
+                case "1":
+                {
+                    if (bankChoose == "1")
+                        bankAccount = centralBank.CreateDebit(customer2, tinkoff, 0);
+                    if (bankChoose == "2")
+                        bankAccount = centralBank.CreateDebit(customer2, sber, 0);
+                    break;
+                }
 
-            if (accountType == "2")
-            {
-                if (bankChoose == "1")
-                    bankAccount = centralBank.CreateCredit(customer2, tinkoff, 0);
-                if (bankChoose == "2")
-                    bankAccount = centralBank.CreateCredit(customer2, sber, 0);
-            }
+                case "2":
+                {
+                    if (bankChoose == "1")
+                        bankAccount = centralBank.CreateCredit(customer2, tinkoff, 0);
+                    if (bankChoose == "2")
+                        bankAccount = centralBank.CreateCredit(customer2, sber, 0);
+                    break;
+                }
 
-            if (accountType == "3")
-            {
-                if (bankChoose == "1")
-                    bankAccount = centralBank.CreateCredit(customer2, tinkoff, 0);
-                if (bankChoose == "2")
-                    bankAccount = centralBank.CreateCredit(customer2, sber, 0);
+                case "3":
+                {
+                    if (bankChoose == "1")
+                        bankAccount = centralBank.CreateCredit(customer2, tinkoff, 0);
+                    if (bankChoose == "2")
+                        bankAccount = centralBank.CreateCredit(customer2, sber, 0);
+                    break;
+                }
             }
 
             Console.Write("Текущее состояние вашего счёта: ");
             Console.WriteLine(bankAccount.Balance);
             Console.WriteLine("Невероятным образом Ваш счёт пополнил незнакомец на 5000!");
-            centralBank.BetweenBankAccounts(customer1, bankAccountFirst, bankAccount, 5000);
+            bankAccountFirst.BetweenBankAccounts(customer1, bankAccountFirst, bankAccount, 4000);
             Console.Write("Текущее состояние вашего счёта: ");
             Console.WriteLine(bankAccount.Balance);
             Console.WriteLine("Прошло 63 дня, на ваш счёт пришли проценты на остаток!");

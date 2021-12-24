@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
 
 namespace Banks.Entities
 {
@@ -19,6 +17,6 @@ namespace Banks.Entities
         public double Money { get; }
         public BankAccount BankAccountFrom { get; }
         public BankAccount BankAccountTo { get; }
-        public Guid TransactionId { get; }
+        private Guid TransactionId { get; }
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Transactions;
-using Banks.Accounts;
+using Banks.Tools;
 
 namespace Banks.Entities
 {
@@ -16,19 +15,19 @@ namespace Banks.Entities
             TransactionLimit = transactionLimit;
         }
 
-        public Guid AccountId { get; }
         public double Balance { get; set; }
-        public double Percentage { get; }
         public double TransactionLimit { get; }
+        private Guid AccountId { get; }
+        private double Percentage { get; }
 
         public virtual void BetweenBankAccounts(Customer customer, BankAccount bankAccountFrom, BankAccount bankAccountTo, double money)
         {
-            if ((customer.Passport == string.Empty || customer.Address == string.Empty) && bankAccountFrom.TransactionLimit < money)
-                throw new Exception("Fulfill additional info to do this operation");
-            if (bankAccountFrom is Deposit)
-                throw new Exception("You can't do this operation with Deposit");
-            if (bankAccountFrom is Debit && bankAccountFrom.Balance < money)
-                throw new Exception("Not enough funds");
+            if (!customer.CheckFullAccount(customer) && bankAccountFrom.TransactionLimit < money)
+                throw new BankException("Fulfill additional info to do this operation");
+            if (bankAccountFrom.Balance < money)
+                throw new BankException("Not enough Funds");
+            if (!customer.CheckFullAccount(customer) && bankAccountFrom.TransactionLimit < money)
+                throw new BankException("Fulfill additional info to do this operation");
             var transaction = new Transaction(customer, bankAccountFrom, bankAccountTo, money);
             _transactions.Add(transaction);
             bankAccountFrom.Balance -= money;
@@ -37,19 +36,19 @@ namespace Banks.Entities
 
         public virtual void CashWithdrawal(Customer customer, BankAccount bankAccount, double money)
         {
-            if ((customer.Passport == string.Empty || customer.Address == string.Empty) && bankAccount.TransactionLimit < money)
-                throw new Exception("Fulfill additional info to do this operation");
-            if (bankAccount is Deposit)
-                throw new Exception("You can't do this operation with Deposit");
-            if (bankAccount is Debit && bankAccount.Balance < money)
-                throw new Exception("Not enough funds");
+            if (!customer.CheckFullAccount(customer) && bankAccount.TransactionLimit < money)
+                throw new BankException("Fulfill additional info to do this operation");
+            if (bankAccount.Balance < money)
+                throw new BankException("Not enough Funds");
+            if (!customer.CheckFullAccount(customer) && bankAccount.TransactionLimit < money)
+                throw new BankException("Fulfill additional info to do this operation");
             BankAccount bankAccountTo = null;
             var transaction = new Transaction(customer, bankAccount,  bankAccountTo, money);
             _transactions.Add(transaction);
             bankAccount.Balance -= money;
         }
 
-        public virtual void Replenishment(Customer customer, BankAccount bankAccount, double money)
+        public void Replenishment(Customer customer, BankAccount bankAccount, double money)
         {
             BankAccount bankAccountTo = null;
             var transaction = new Transaction(customer, bankAccount,  bankAccountTo, money);
@@ -57,19 +56,19 @@ namespace Banks.Entities
             bankAccount.Balance += money;
         }
 
-        public virtual void DiscardTransactionBetweenBankAccounts(Transaction transaction)
+        public void DiscardTransactionBetweenBankAccounts(Transaction transaction)
         {
             BetweenBankAccounts(transaction.Customer, transaction.BankAccountTo, transaction.BankAccountFrom, transaction.Money);
             _transactions.Remove(transaction);
         }
 
-        public virtual void DiscardTransactionCashWithdrawal(Transaction transaction)
+        public void DiscardTransactionCashWithdrawal(Transaction transaction)
         {
             CashWithdrawal(transaction.Customer, transaction.BankAccountTo, transaction.Money);
             _transactions.Remove(transaction);
         }
 
-        public virtual void DiscardTransactionReplenishment(Transaction transaction)
+        public void DiscardTransactionReplenishment(Transaction transaction)
         {
             Replenishment(transaction.Customer, transaction.BankAccountTo, transaction.Money);
             _transactions.Remove(transaction);

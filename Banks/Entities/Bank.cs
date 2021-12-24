@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Banks.Entities
 {
@@ -17,11 +16,11 @@ namespace Banks.Entities
         }
 
         public double TransactionLimit { get; set; }
-        public string BankName { get; }
         public double LoanInterest { get; set; }
         public double InterestOnTheBalanceDebit { get; set; }
         public double InterestOnTheBalanceDeposit { get; set; }
         public List<Customer> Customers { get; }
         public List<BankAccount> BankAccounts { get; }
+        private string BankName { get; }
     }
 }

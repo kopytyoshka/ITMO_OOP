@@ -1,5 +1,4 @@
 using System;
-using Banks.Accounts;
 using Banks.Entities;
 using NUnit.Framework;
 
@@ -32,7 +31,7 @@ namespace Banks.Tests
         {
             Bank bank = _centralBank.CreateNewBank(5, 3.5, 5, 10000, "Тинькофф");
             Customer customer = _centralBank.CreateNewCustomer("Ivan", "Ivanov", "Ivanovich");
-            _centralBank.AddCustomerInfo(customer, "123456", "Пушкина 2");
+            customer.AddCustomerInfo(customer, "123456", "Пушкина 2");
             BankAccount account = _centralBank.CreateDebit(customer, bank, 100000);
             account.Replenishment(customer, account, 10000);
             Assert.Catch<Exception>(() =>
@@ -42,11 +41,11 @@ namespace Banks.Tests
         }
 
         [Test]
-        public void TransactionFromDeposit_ThrowExсeption()
+        public void TransactionFromDeposit_ThrowException()
         {
             Bank bank = _centralBank.CreateNewBank(5, 3.5, 5, 10000, "Тинькофф");
             Customer customer = _centralBank.CreateNewCustomer("Ivan", "Ivanov", "Ivanovich");
-            _centralBank.AddCustomerInfo(customer, "123456", "Пушкина 2");
+            customer.AddCustomerInfo(customer, "123456", "Пушкина 2");
             BankAccount account = _centralBank.CreateDeposit(customer, bank, 100000);
             Assert.Catch<Exception>(() =>
             {
@@ -73,7 +72,7 @@ namespace Banks.Tests
         {
             Bank bank = _centralBank.CreateNewBank(5, 3.5, 5, 10000, "Тинькофф");
             Customer customer = _centralBank.CreateNewCustomer("Ivan", "Ivanov", "Ivanovich");
-            _centralBank.AddCustomerInfo(customer, "123456", "Пушкина 2");
+            customer.AddCustomerInfo(customer, "123456", "Пушкина 2");
             BankAccount account = _centralBank.CreateDebit(customer, bank, 100000);
             _centralBank.TimeMachine(62);
             Assert.AreEqual(account.Balance, 107000);
