@@ -33,7 +33,7 @@ namespace Backups.Tests
             List<Storage> finalStorages = repository.SaveStoragesRepository(new SplitStorage(), _backup.GetJobObjects(), 1);
             _backup.StartBackupJob(finalStorages);
             int i = _backup.GetListRestorePoints().Sum(restorePoint => restorePoint.Storages.Count);
-            Assert.AreEqual(2, _backup.GetListRestorePoints().Count);
+            Assert.AreEqual(4, _backup.GetListRestorePoints().Count);
             Assert.AreEqual(3, i);
         }
 
