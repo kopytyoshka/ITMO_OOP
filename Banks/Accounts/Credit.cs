@@ -13,8 +13,6 @@ namespace Banks.Accounts
         {
             if (!customer.CheckFullAccount(customer) && bankAccountFrom.TransactionLimit < money)
                 throw new BankException("Fulfill additional info to do this operation");
-            if (!customer.CheckFullAccount(customer) && bankAccountFrom.TransactionLimit < money)
-                throw new BankException("Fulfill additional info to do this operation");
             var transaction = new Transaction(customer, bankAccountFrom, bankAccountTo, money);
             _transactions.Add(transaction);
             bankAccountFrom.Balance -= money;
@@ -23,8 +21,6 @@ namespace Banks.Accounts
 
         public override void CashWithdrawal(Customer customer, BankAccount bankAccount, double money)
         {
-            if (!customer.CheckFullAccount(customer) && bankAccount.TransactionLimit < money)
-                throw new BankException("Fulfill additional info to do this operation");
             if (!customer.CheckFullAccount(customer) && bankAccount.TransactionLimit < money)
                 throw new BankException("Fulfill additional info to do this operation");
             BankAccount bankAccountTo = null;
