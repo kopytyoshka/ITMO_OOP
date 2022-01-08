@@ -3,7 +3,7 @@ using Backups.Entities;
 
 namespace BackupsExtra.DeleteAlgorythms
 {
-    public class HybridDeleteFirst
+    public class HybridDeleteFirst : IDeleteAlgorythm
     {
         private AmountDelete _amountDelete = new AmountDelete();
         private TimeDelete _timeDelete = new TimeDelete();

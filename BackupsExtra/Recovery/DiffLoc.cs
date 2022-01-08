@@ -6,7 +6,7 @@ using ZipFile = System.IO.Compression.ZipFile;
 
 namespace BackupsExtra.Recovery
 {
-    public class DiffLoc
+    public class DiffLoc : IRecovery
     {
         public void Recovery(BackupJob backupJob, DirectoryInfo? directory)
         {

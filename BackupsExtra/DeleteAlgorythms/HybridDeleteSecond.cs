@@ -6,7 +6,7 @@ using BackupsExtra.Tools;
 
 namespace BackupsExtra.DeleteAlgorythms
 {
-    public class HybridDeleteSecond
+    public class HybridDeleteSecond : IDeleteAlgorythm
     {
         private List<RestorePoint> _restorePointsToDeleteByTime = new List<RestorePoint>();
         private List<RestorePoint> _restorePointsToDeleteByAmount = new List<RestorePoint>();

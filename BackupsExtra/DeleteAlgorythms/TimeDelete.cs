@@ -5,7 +5,7 @@ using BackupsExtra.Tools;
 
 namespace BackupsExtra.DeleteAlgorythms
 {
-    public class TimeDelete
+    public class TimeDelete : IDeleteAlgorythm
     {
         public BackupJob DeleteAlgorythm(BackupJob backupJob, int? amountSavedRestorePoints, DateTime? dateTime)
         {

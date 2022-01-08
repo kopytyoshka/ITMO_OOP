@@ -8,7 +8,7 @@ namespace BackupsExtra.Logger
     {
         public void Logger(string message)
         {
-            // File.AppendAllText("logg.txt", DateTime.Now + message);
+            File.AppendAllText("logg.txt", DateTime.Now + message);
         }
     }
 }
