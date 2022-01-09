@@ -18,5 +18,12 @@ namespace Banks.Accounts
         {
             throw new BankException("Operation declined due to it's a Deposit Account");
         }
+
+        public override BankAccount ChangeBalanceAfterTime(int days, BankAccount bankAccount, Bank bank)
+        {
+            int months = days / 30;
+            bankAccount.Balance = bankAccount.Balance / 100 * bank.InterestOnTheBalanceDeposit * months;
+            return bankAccount;
+        }
     }
 }

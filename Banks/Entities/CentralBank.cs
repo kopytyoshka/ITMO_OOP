@@ -96,23 +96,11 @@ namespace Banks.Entities
 
         public void TimeMachine(int days)
         {
-            int months = days / 30;
             foreach (Bank bank in Banks)
             {
                 foreach (BankAccount bankAccount in bank.BankAccounts)
                 {
-                    switch (bankAccount)
-                    {
-                        case Deposit _:
-                            bankAccount.Balance = bankAccount.Balance / 100 * bank.InterestOnTheBalanceDeposit * months;
-                            break;
-                        case Debit _:
-                            bankAccount.Balance += bankAccount.Balance / 100 * bank.InterestOnTheBalanceDebit * months;
-                            break;
-                        case Credit _:
-                            bankAccount.Balance += bankAccount.Balance / 100 * bank.LoanInterest * months;
-                            break;
-                    }
+                    bankAccount.ChangeBalanceAfterTime(days, bankAccount, bank);
                 }
             }
         }

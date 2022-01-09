@@ -73,5 +73,10 @@ namespace Banks.Entities
             Replenishment(transaction.Customer, transaction.BankAccountTo, transaction.Money);
             _transactions.Remove(transaction);
         }
+
+        public virtual BankAccount ChangeBalanceAfterTime(int days, BankAccount bankAccount, Bank bank)
+        {
+            return bankAccount;
+        }
     }
 }

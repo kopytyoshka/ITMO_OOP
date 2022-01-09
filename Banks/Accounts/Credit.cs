@@ -28,5 +28,12 @@ namespace Banks.Accounts
             _transactions.Add(transaction);
             bankAccount.Balance -= money;
         }
+
+        public override BankAccount ChangeBalanceAfterTime(int days, BankAccount bankAccount, Bank bank)
+        {
+            int months = days / 30;
+            bankAccount.Balance += bankAccount.Balance / 100 * bank.LoanInterest * months;
+            return bankAccount;
+        }
     }
 }
