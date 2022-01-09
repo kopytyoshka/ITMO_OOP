@@ -2,9 +2,9 @@ using Isu.Entities;
 
 namespace IsuExtra.Entities
 {
-    public class GroupLessons
+    public class GroupLesson
     {
-        public GroupLessons(string name, string time, GroupName groupName)
+        public GroupLesson(string name, string time, GroupName groupName)
         {
             Name = name;
             Time = time;
