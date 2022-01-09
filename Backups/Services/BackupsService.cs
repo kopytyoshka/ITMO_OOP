@@ -5,7 +5,7 @@ namespace Backups.Services
 {
     public class BackupsService : IBackupsService
     {
-        private BackupJob BackupJob { get; } = new ();
+        public BackupJob BackupJob { get; } = new ();
 
         public void AddJobObjectBackupJob(JobObject jobObject)
         {
