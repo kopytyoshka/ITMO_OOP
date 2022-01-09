@@ -5,12 +5,12 @@ using Isu.Entities;
 
 namespace IsuExtra.Entities
 {
-    public class Flows
+    public class Flow
     {
-        public Flows(string flowName, int capacity)
+        public Flow(string flowName, int capacity)
         {
             Name = flowName;
-            LessonsList = new List<Lessons>();
+            LessonsList = new List<Lesson>();
             Capacity = capacity;
             Students = new List<Student>();
         }
@@ -18,6 +18,6 @@ namespace IsuExtra.Entities
         public string Name { get; }
         public int Capacity { get; }
         public List<Student> Students { get; }
-        public List<Lessons> LessonsList { get; }
+        public List<Lesson> LessonsList { get; }
     }
 }

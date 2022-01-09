@@ -1,8 +1,8 @@
 namespace IsuExtra.Entities
 {
-    public class Lessons
+    public class Lesson
     {
-        public Lessons(string name, string time)
+        public Lesson(string name, string time)
         {
             Name = name;
             Time = time;

@@ -8,6 +8,7 @@ namespace Backups.Entities
     public class RestorePoint
     {
         private static uint _id;
+
         public RestorePoint()
         {
             DateTime = DateTime.Now;
@@ -15,9 +16,9 @@ namespace Backups.Entities
             Storages = new List<Storage>();
         }
 
+        public DateTime DateTime { get; }
         public List<Storage> Storages { get; }
         public string RestoreDirectory { get; set; }
         private uint Id { get; }
-        private DateTime DateTime { get; }
     }
 }
